@@ -4,20 +4,18 @@ from PIL import Image
 from google import genai
 from typing import Dict, Any, Union
 import load_dotenv
-
-if './env'.exists():
-        load_dotenv(dotenv_path='./env')
-else:
-        logging.info("No backend/.env file found; continuing without loading local env")
-
-# gemini api key
-apikey = os.getenv('GOOGLE_API_KEY')
-if not apikey:
-  print("Warning: GOOGLE_API_KEY environment variable not set. Please set it to use the Gemini API.")
-
-client = genai.Client(api_key=apikey)
+import logging
 
 def get_info(Image: str) -> Dict[str, str]:
+  if './env'.exists():
+    load_dotenv(dotenv_path='./env')
+  else:
+    logging.info("No backend/.env file found; continuing without loading local env")
+
+  # gemini api key
+  apikey = os.getenv('GOOGLE_API_KEY')
+   
+  client = genai.Client(api_key=apikey)`
 
   response = client.models.generate_content(
       model = 'gemini-2.5-flash',
