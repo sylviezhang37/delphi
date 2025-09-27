@@ -1,6 +1,6 @@
-import asyncio
 import base64
 import io
+import os
 import json
 import logging
 from typing import Any, Dict
@@ -8,7 +8,6 @@ from typing import Any, Dict
 from PIL import Image
 
 from mcp.server import Server
-from mcp.server.models import InitializationOptions
 from mcp.server.stdio import stdio_server
 from mcp.types import (
     CallToolResult,
@@ -47,8 +46,8 @@ class DelphiOCRServer:
                                     "description": "Object with image keys and base64 values",
                                     "additionalProperties": {
                                         "type": "string",
-                                        "description": "Base64 encoded image data"
-                                    }
+                                        "description": "Base64 encoded image data",
+                                    },
                                 }
                             },
                             "required": ["images"],
@@ -69,24 +68,30 @@ class DelphiOCRServer:
     async def _handle_ocr_signs(
         self, arguments: Dict[str, Any]
     ) -> CallToolResult:
+        if not os.getenv("GEMINI_API_KEY"):
+            return create_error_response(
+                ErrorCodes.INTERNAL_ERROR,
+                "Configuration error: GOOGLE_API_KEY not found",
+            )
+
         validation_error = self._validate_ocr_request(arguments)
         if validation_error:
             return validation_error
 
         logger.info("Processing OCR request with valid image data")
-        
+
         images = arguments.get("images", {})
         results = {}
-        
+
         for image_key, image_data in images.items():
             # Decode base64 image
             image_bytes = base64.b64decode(image_data)
             image = Image.open(io.BytesIO(image_bytes))
-            
+
             # Process with CV module - use output directly
             analysis_result = get_info(image)
             results[image_key] = analysis_result
-        
+
         response = {"results": results}
 
         return CallToolResult(
@@ -107,7 +112,7 @@ class DelphiOCRServer:
                 ErrorCodes.NO_IMAGE_DATA, ErrorMessages.NO_IMAGE_DATA
             )
 
-        for image_key, image_data in images.items():
+        for _, image_data in images.items():
             if not self._is_valid_base64(image_data):
                 return create_error_response(
                     ErrorCodes.INVALID_BASE64, ErrorMessages.INVALID_BASE64

@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Delphi MCP Server Runner
-"""
-
 import asyncio
 import logging
 import sys
@@ -10,22 +6,20 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Add the mcp_server directory to the Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'mcp_server'))
-
 from mcp_server.server import DelphiOCRServer
 from mcp.server.models import InitializationOptions
 from mcp.server.stdio import stdio_server
+
+# Add the mcp_server directory to the Python path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "mcp_server"))
+
 
 logger = logging.getLogger(__name__)
 
 
 async def main() -> None:
-    """Main server function"""
-    logger.info("Starting Delphi MCP Server...")
-    
     server = DelphiOCRServer()
-    
+
     async with stdio_server() as (read_stream, write_stream):
         await server.server.run(
             read_stream,
@@ -43,11 +37,14 @@ async def main() -> None:
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    # Load environment variables from backend/.env if present
-    env_path = Path(__file__).resolve().parent / '.env'
+
+    env_path = Path(__file__).resolve().parent / ".env"
     if env_path.exists():
         load_dotenv(dotenv_path=env_path)
+        logger.info("Loaded environment variables from .env")
     else:
-        logging.info("No backend/.env file found; continuing without loading local env")
+        logger.warning(
+            "No .env file found."
+        )
+
     asyncio.run(main())
-    
