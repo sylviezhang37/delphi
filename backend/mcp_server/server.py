@@ -1,8 +1,11 @@
 import asyncio
 import base64
+import io
 import json
 import logging
 from typing import Any, Dict
+
+from PIL import Image
 
 from mcp.server import Server
 from mcp.server.models import InitializationOptions
@@ -15,6 +18,7 @@ from mcp.types import (
 )
 
 from .errors import ErrorCodes, ErrorMessages, create_error_response
+from detection.image_recognition import getInfo
 
 logger = logging.getLogger(__name__)
 
@@ -57,21 +61,20 @@ class DelphiOCRServer:
                 raise ValueError(f"Unknown tool: {name}")
     
     async def _handle_ocr_signs(self, arguments: Dict[str, Any]) -> CallToolResult:
-        """Handle OCR signs tool call"""
         validation_error = self._validate_ocr_request(arguments)
         if validation_error:
             return validation_error
         
-        # TODO(sylvie): Call CV module for actual OCR processing
         logger.info("Processing OCR request with valid image data")
         
-        placeholder_response = {
-            "overview": "Quick overview under 10 seconds",
-            "detail": ["Detailed description under 30 seconds"],
-        }
+        image_data = arguments.get("image")
+        image_bytes = base64.b64decode(image_data)
+
+        image = Image.open(io.BytesIO(image_bytes))
+        response = getInfo(image)
         
         return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(placeholder_response))]
+            content=[TextContent(type="text", text=json.dumps(response))]
         )
     
     def _validate_ocr_request(self, arguments: Dict[str, Any]) -> CallToolResult:

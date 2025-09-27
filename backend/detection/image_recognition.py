@@ -7,18 +7,7 @@ from google import genai
 apikey = userdata.get('GOOGLE_API_KEY')
 client = genai.Client(api_key=apikey)
 
-# example
-# input_image = './girlhacks_poster.png'
-
-# read input from MCP
-def readInput():
-  pass
-
-# pass image into the a format where it can read it
-input_image = Image.open(input_image)
-
-# pass formatted image into gemini, for it to perform analysis and give info
-def getInfo(Image):
+def get_info(Image: str) -> Dict[str, str]:
 
   response = client.models.generate_content(
       model = 'gemini-2.5-flash',
