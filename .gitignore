@@ -11,3 +11,6 @@ venv/
 .vscode/
 .cursorrules
 .DS_Store
+
+# Test Files
+backend/*.png
