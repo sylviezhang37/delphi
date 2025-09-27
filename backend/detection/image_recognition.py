@@ -1,9 +1,14 @@
+import numpy as np
+from google.colab import userdata
+from PIL import Image
+from google import genai
+
 # gemini api key
 apikey = userdata.get('GOOGLE_API_KEY')
 client = genai.Client(api_key=apikey)
 
 # example
-input_image = './girlhacks_poster.png'
+# input_image = './girlhacks_poster.png'
 
 # read input from MCP
 def readInput():
