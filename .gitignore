@@ -1,3 +1,7 @@
+# python rules
+__pycache__/
+*.pyc
+
 # vscode rules
 .vscode
 
