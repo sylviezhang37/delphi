@@ -24,21 +24,25 @@ Delphi is a React Native application designed to assist blind and visually impai
 ### Installation
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Install additional dependencies for camera and speech:
+
 ```bash
 npx expo install expo-camera expo-av expo-speech expo-permissions
 ```
 
 3. Start the development server:
+
 ```bash
 npm start
 ```
 
 4. Run on Android:
+
 ```bash
 npm run android
 ```
@@ -77,18 +81,21 @@ frontend/
 ## Key Components
 
 ### HomePage
+
 - Welcome screen with assistant introduction
 - Large, accessible buttons for navigation
 - Voice feedback for all interactions
 - Assistant icon in the center
 
 ### ChatScreen
+
 - Interactive chat interface
 - Text input with voice feedback
 - Simulated AI responses (ready for Gemini API integration)
 - Back navigation
 
 ### ObservationScreen
+
 - Camera integration for environment scanning
 - Real-time scanning with voice feedback
 - Permission handling for camera access
