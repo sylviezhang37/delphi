@@ -13,4 +13,4 @@ venv/
 .DS_Store
 
 # Test Files
-backend/*.png
+backend/tests/*.png
