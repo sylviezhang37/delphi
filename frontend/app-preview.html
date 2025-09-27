@@ -24,58 +24,134 @@
         .container {
             background: white;
             border-radius: 20px;
-            padding: 40px;
             max-width: 400px;
             width: 100%;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            text-align: center;
             display: flex;
             flex-direction: column;
-            height: 600px;
+            height: 700px;
+            overflow: hidden;
         }
         
-        .logo-container {
-            padding-top: 20px;
-            padding-bottom: 40px;
+        .header {
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
         }
         
         .logo {
-            width: 33%;
+            width: 40%;
             height: auto;
             object-fit: contain;
         }
         
-        .icon-container {
+        .main-content {
             flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #497a5b;
+            margin-bottom: 8px;
+        }
+        
+        .welcome-subtitle {
+            font-size: 16px;
+            color: #666666;
+            margin: 0;
+        }
+        
+        .icon-container {
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
         }
         
         .assistant-icon {
-            font-size: 120px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #497a5b;
+            box-shadow: 0 4px 8px rgba(73, 122, 91, 0.2);
         }
         
-        .button-container {
-            padding-bottom: 20px;
+        .icon-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
         }
         
-        .start-button {
+        .actions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 300px;
+            padding: 0 20px;
+            margin-top: 0;
+        }
+        
+        .primary-button {
             background: #497a5b;
             border: 2px solid #f4b400;
-            border-radius: 30px;
-            padding: 18px 40px;
+            border-radius: 25px;
+            padding: 18px 30px;
             color: white;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s;
             box-shadow: 0 4px 8px rgba(73, 122, 91, 0.3);
         }
         
-        .start-button:hover {
+        .primary-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(73, 122, 91, 0.4);
+        }
+        
+        .secondary-button {
+            background: white;
+            border: 2px solid #497a5b;
+            border-radius: 25px;
+            padding: 18px 30px;
+            color: #497a5b;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .secondary-button:hover {
+            transform: translateY(-2px);
+            background: #f8f9fa;
+        }
+        
+        .footer {
+            padding: 20px 40px;
+            text-align: center;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .footer-text {
+            font-size: 12px;
+            color: #999999;
+            margin: 0;
         }
         
         .status {
@@ -105,24 +181,40 @@
 </head>
 <body>
     <div class="container">
-        <div class="logo-container">
+        <div class="header">
             <img src="assets/delphi_rect_logo.png" alt="Delphi Logo" class="logo">
         </div>
         
-        <div class="status">
-            <div class="loading"></div>
-            <strong>React Native App Starting...</strong><br>
-            <small>This is a preview of your Delphi app interface</small>
+        <div class="main-content">
+            <div class="welcome-section">
+                <h1 class="welcome-title">Welcome to Delphi</h1>
+                <p class="welcome-subtitle">Your AI-powered vision assistant</p>
+            </div>
+            
+            <div class="status">
+                <div class="loading"></div>
+                <strong>React Native App Starting...</strong><br>
+                <small>This is a preview of your Delphi app interface</small>
+            </div>
+            
+            <div class="icon-container">
+                <div class="assistant-icon">
+                    <img src="assets/hearing-icon.png" alt="AI Assistant Icon" class="icon-image">
+                </div>
+            </div>
+            
+            <div class="actions-container">
+                <button class="primary-button" onclick="speak('Starting chat mode. You can now ask me questions about your surroundings.')">
+                    Start Chatting
+                </button>
+                <button class="secondary-button" onclick="speak('Starting observation mode. I will scan your surroundings and describe what I see.')">
+                    Scan Environment
+                </button>
+            </div>
         </div>
         
-        <div class="icon-container">
-            <div class="assistant-icon">🤖</div>
-        </div>
-        
-        <div class="button-container">
-            <button class="start-button" onclick="speak('Starting chat mode. You can now ask me questions about your surroundings.')">
-                Start Chat
-            </button>
+        <div class="footer">
+            <p class="footer-text">Tap anywhere to hear this message again</p>
         </div>
     </div>
     
