@@ -1,3 +1,5 @@
 mcp>=1.0.0
 pytest>=7.0.0
 pytest-asyncio>=0.21.0
+python-dotenv>=1.0.0
+pytesseract>=0.3.10

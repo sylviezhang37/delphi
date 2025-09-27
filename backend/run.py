@@ -7,6 +7,8 @@ import asyncio
 import logging
 import sys
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 
 # Add the mcp_server directory to the Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'mcp_server'))
@@ -41,5 +43,11 @@ async def main() -> None:
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
+    # Load environment variables from backend/.env if present
+    env_path = Path(__file__).resolve().parent / '.env'
+    if env_path.exists():
+        load_dotenv(dotenv_path=env_path)
+    else:
+        logging.info("No backend/.env file found; continuing without loading local env")
     asyncio.run(main())
     
