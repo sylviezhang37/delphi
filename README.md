@@ -4,7 +4,7 @@ NJIT GirlHacks 2025
 
 What it does
 
-A mobile app where a blind/low-vision user can capture a single photo, and the app will speak aloud any text (signs, flyers, labels) detected in the image.
+A mobile app where a blind/low-vision user can capture the environment, and the app will speak aloud the information on signs, flyers, labels, etc. detected in the image.
 
 ⸻
 
