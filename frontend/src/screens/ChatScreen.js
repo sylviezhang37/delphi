@@ -72,7 +72,10 @@ export default function ChatScreen({ navigation }) {
         >
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Chat with Delphi</Text>
+      </View>
+
+      <View style={styles.header2}>
+          <Text style={styles.headerTitle}>Chat with Delphi</Text>
       </View>
 
       <ScrollView style={styles.messagesContainer}>
@@ -141,6 +144,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
   },
   header: {
+    paddingTop: 50,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -158,9 +162,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: 'bold',
     color: '#497a5b',
+  },
+  header2: {
+    paddingHorizontal: 20,
+    paddingTop: 15,
   },
   messagesContainer: {
     flex: 1,

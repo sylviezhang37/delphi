@@ -13,7 +13,7 @@ import { enableAccessibilityFeatures, announceScreenChange } from './Accessibili
 
 const { width, height } = Dimensions.get('window');
 
-export default function HomePage({ navigation }) {
+export default function HomeScreen({ navigation }) {
   // Enable accessibility features
   enableAccessibilityFeatures();
 
@@ -62,18 +62,17 @@ export default function HomePage({ navigation }) {
       accessibilityLabel="Tap to hear welcome message again"
       activeOpacity={1}
     >
-      {/* Header with Logo */}
-      <View style={styles.header}>
-        <Image 
-          source={require('../assets/delphi_rect_logo.png')} 
-          style={styles.logo}
-          accessibilityLabel="Delphi Logo"
-          resizeMode="contain"
-        />
-      </View>
-
       {/* Main Content Area */}
       <View style={styles.mainContent}>
+        {/* Header with Logo */}
+        <View style={styles.header}>
+          <Image 
+            source={require('../assets/logo.png')} 
+            style={styles.logo}
+            accessibilityLabel="Delphi Logo"
+            resizeMode="contain"
+          />
+        </View>
         {/* Welcome Message */}
         <View style={styles.welcomeSection}>
           <Text style={styles.welcomeTitle} accessibilityRole="header">
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 60,
-    paddingBottom: 20,
+    paddingBottom: 10,
     paddingHorizontal: 30,
     alignItems: 'center',
     borderBottomWidth: 1,
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     paddingHorizontal: 40,
-    paddingVertical: 40,
+    paddingVertical: 140,
     alignItems: 'center',
   },
   welcomeSection: {
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
     borderWidth: 2,
-    borderColor: '#f4b400',
+    borderColor: '#497a5b',
   },
   primaryButtonText: {
     color: '#ffffff',
@@ -250,5 +249,4 @@ const styles = StyleSheet.create({
     color: '#999999',
     textAlign: 'center',
   },
-});
 });
