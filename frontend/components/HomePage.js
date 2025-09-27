@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   AccessibilityInfo,
+  Image,
 } from 'react-native';
 import * as Speech from 'expo-speech';
 import { enableAccessibilityFeatures, announceScreenChange } from './AccessibilityHelper';
@@ -61,64 +62,34 @@ export default function HomePage({ navigation }) {
       accessibilityLabel="Tap to hear welcome message again"
       activeOpacity={1}
     >
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title} accessibilityRole="header">
-          Delphi
-        </Text>
-        <Text style={styles.subtitle} accessibilityRole="text">
-          Your AI Vision Assistant
-        </Text>
+      {/* Logo Space */}
+      <View style={styles.logoContainer}>
+        <Image 
+          source={require('../assets/delphi_rect_logo.png')} 
+          style={styles.logo}
+          accessibilityLabel="Delphi Logo"
+          resizeMode="contain"
+        />
       </View>
 
-      {/* Assistant Icon */}
+      {/* Simple Icon in Middle */}
       <View style={styles.iconContainer}>
-        <View style={styles.assistantIcon}>
-          <Text style={styles.iconText} accessibilityLabel="AI Assistant Icon">
-            🤖
-          </Text>
-        </View>
-        <Text style={styles.iconDescription} accessibilityRole="text">
-          I'm here to help you see and understand your world
+        <Text style={styles.iconText} accessibilityLabel="AI Assistant Icon">
+          🤖
         </Text>
       </View>
 
-      {/* Action Buttons */}
+      {/* Simple Start Chat Button */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={[styles.button, styles.chatButton]}
+          style={styles.startButton}
           onPress={handleStartChat}
           accessibilityRole="button"
           accessibilityLabel="Start chatting with the assistant"
           accessibilityHint="Double tap to begin a conversation with the AI assistant"
         >
-          <Text style={styles.buttonIcon}>💬</Text>
-          <Text style={styles.buttonText}>Start Chatting</Text>
-          <Text style={styles.buttonDescription}>
-            Ask me questions about anything
-          </Text>
+          <Text style={styles.startButtonText}>Start Chat</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.button, styles.observationButton]}
-          onPress={handleStartObservation}
-          accessibilityRole="button"
-          accessibilityLabel="Start observing surroundings"
-          accessibilityHint="Double tap to begin scanning and describing your environment"
-        >
-          <Text style={styles.buttonIcon}>👁️</Text>
-          <Text style={styles.buttonText}>Observe Surroundings</Text>
-          <Text style={styles.buttonDescription}>
-            Let me scan and describe your environment
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Footer */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText} accessibilityRole="text">
-          Tap anywhere on the screen to hear this message again
-        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -127,39 +98,36 @@ export default function HomePage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 30,
   },
-  header: {
+  logoContainer: {
+    paddingTop: 80,
+    paddingBottom: 40,
     alignItems: 'center',
-    marginTop: 60,
-    marginBottom: 40,
   },
-  title: {
-    fontSize: 42,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#7f8c8d',
-    textAlign: 'center',
+  logo: {
+    width: width * 0.33,
+    height: (width * 0.33) * 0.4, // Maintain aspect ratio
   },
   iconContainer: {
-    alignItems: 'center',
-    marginVertical: 40,
-  },
-  assistantIcon: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: '#3498db',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
-    shadowColor: '#000',
+  },
+  iconText: {
+    fontSize: 120,
+  },
+  buttonContainer: {
+    paddingBottom: 60,
+    alignItems: 'center',
+  },
+  startButton: {
+    backgroundColor: '#497a5b',
+    paddingHorizontal: 40,
+    paddingVertical: 18,
+    borderRadius: 30,
+    shadowColor: '#497a5b',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -167,69 +135,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
+    borderWidth: 2,
+    borderColor: '#f4b400',
   },
-  iconText: {
-    fontSize: 48,
-  },
-  iconDescription: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    textAlign: 'center',
-    paddingHorizontal: 20,
-    lineHeight: 24,
-  },
-  buttonContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    gap: 20,
-  },
-  button: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 24,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-    minHeight: 120,
-    justifyContent: 'center',
-  },
-  chatButton: {
-    borderLeftWidth: 4,
-    borderLeftColor: '#e74c3c',
-  },
-  observationButton: {
-    borderLeftWidth: 4,
-    borderLeftColor: '#27ae60',
-  },
-  buttonIcon: {
-    fontSize: 32,
-    marginBottom: 12,
-  },
-  buttonText: {
+  startButtonText: {
+    color: '#ffffff',
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 8,
-  },
-  buttonDescription: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  footer: {
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  footerText: {
-    fontSize: 12,
-    color: '#95a5a6',
     textAlign: 'center',
   },
 });

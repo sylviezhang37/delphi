@@ -184,13 +184,13 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    color: '#3498db',
+    color: '#497a5b',
     fontWeight: '600',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#2c3e50',
+    color: '#497a5b',
   },
   cameraContainer: {
     flex: 1,
@@ -238,13 +238,17 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   scanButton: {
-    backgroundColor: '#27ae60',
+    backgroundColor: '#497a5b',
+    borderWidth: 1,
+    borderColor: '#f4b400',
   },
   stopButton: {
     backgroundColor: '#e74c3c',
   },
   speakButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#497a5b',
+    borderWidth: 1,
+    borderColor: '#f4b400',
   },
   buttonIcon: {
     fontSize: 20,
@@ -264,12 +268,12 @@ const styles = StyleSheet.create({
   descriptionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#2c3e50',
+    color: '#497a5b',
     marginBottom: 10,
   },
   descriptionText: {
     fontSize: 14,
-    color: '#7f8c8d',
+    color: '#497a5b',
     lineHeight: 20,
     marginBottom: 15,
   },

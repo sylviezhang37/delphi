@@ -114,6 +114,23 @@ export default function ChatScreen({ navigation }) {
           <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.cameraButtonContainer}>
+        <TouchableOpacity
+          style={styles.cameraButton}
+          onPress={() => {
+            Speech.speak("Opening camera to scan your surroundings.", {
+              language: 'en',
+              pitch: 1.0,
+              rate: 0.8,
+            });
+            navigation.navigate('Observation');
+          }}
+          accessibilityLabel="Open camera to scan surroundings"
+        >
+          <Text style={styles.cameraButtonText}>📷 Scan Environment</Text>
+        </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -137,13 +154,13 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    color: '#3498db',
+    color: '#497a5b',
     fontWeight: '600',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#2c3e50',
+    color: '#497a5b',
   },
   messagesContainer: {
     flex: 1,
@@ -157,7 +174,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   userMessage: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#497a5b',
     alignSelf: 'flex-end',
   },
   aiMessage: {
@@ -172,7 +189,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   aiMessageText: {
-    color: '#2c3e50',
+    color: '#497a5b',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -194,15 +211,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   sendButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#497a5b',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#f4b400',
   },
   sendButtonText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  cameraButtonContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#f8f9fa',
+    borderTopWidth: 1,
+    borderTopColor: '#e1e8ed',
+  },
+  cameraButton: {
+    backgroundColor: '#497a5b',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#f4b400',
+  },
+  cameraButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
