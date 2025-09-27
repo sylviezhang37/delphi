@@ -1,10 +1,16 @@
 import numpy as np
-from google.colab import userdata
+import os
 from PIL import Image
 from google import genai
+from typing import Dict, Any, Union
+
+load_dotenv()
 
 # gemini api key
-apikey = userdata.get('GOOGLE_API_KEY')
+apikey = os.getenv('GOOGLE_API_KEY')
+if not apikey:
+  print("Warning: GOOGLE_API_KEY environment variable not set. Please set it to use the Gemini API.")
+
 client = genai.Client(api_key=apikey)
 
 def get_info(Image: str) -> Dict[str, str]:
@@ -26,5 +32,3 @@ def get_info(Image: str) -> Dict[str, str]:
   )
   
   return response.text
-
-getInfo(input_image)
