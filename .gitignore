@@ -1,11 +1,13 @@
-# python rules
+# Python
 __pycache__/
-.pytest_cache/
-.venv/
 *.pyc
+.pytest_cache/
 
-# vscode rules
-.vscode
+# Virtual env
+.venv/
+venv/
 
-# cursor rules
+# Editors
+.vscode/
 .cursorrules
+.DS_Store
