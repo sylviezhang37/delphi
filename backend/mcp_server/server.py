@@ -1,23 +1,16 @@
-import base64
-import io
-import os
-import json
-import logging
+import base64, io, os, json, logging
 from typing import Any, Dict
 
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 from PIL import Image
 
 from mcp.server import Server
-from mcp.server.stdio import stdio_server
-from mcp.types import (
-    CallToolResult,
-    ListToolsResult,
-    Tool,
-    TextContent,
-)
+from mcp.types import CallToolResult, ListToolsResult, Tool, TextContent
 
 from .errors import ErrorCodes, ErrorMessages, create_error_response
-from detection.image_recognition import get_info
+from gemini.image_recognition import get_info
 
 logger = logging.getLogger(__name__)
 
@@ -28,26 +21,19 @@ class DelphiOCRServer:
         self._setup_handlers()
 
     def _setup_handlers(self) -> None:
-        """Set up MCP server handlers"""
-
         @self.server.list_tools()
         async def list_tools() -> ListToolsResult:
-            """List available tools"""
             return ListToolsResult(
                 tools=[
                     Tool(
-                        name="ocr_signs",
-                        description="Extract text from images using OCR for blind/low-vision users",
+                        name="image_to_text",
+                        description="Extract text from images for blind/low-vision users",
                         inputSchema={
                             "type": "object",
                             "properties": {
                                 "images": {
                                     "type": "object",
-                                    "description": "Object with image keys and base64 values",
-                                    "additionalProperties": {
-                                        "type": "string",
-                                        "description": "Base64 encoded image data",
-                                    },
+                                    "additionalProperties": {"type": "string"},
                                 }
                             },
                             "required": ["images"],
@@ -60,10 +46,9 @@ class DelphiOCRServer:
         async def call_tool(
             name: str, arguments: Dict[str, Any]
         ) -> CallToolResult:
-            if name == "ocr_signs":
+            if name == "image_to_text":
                 return await self._handle_ocr_signs(arguments)
-            else:
-                raise ValueError(f"Unknown tool: {name}")
+            raise ValueError(f"Unknown tool: {name}")
 
     async def _handle_ocr_signs(
         self, arguments: Dict[str, Any]
@@ -71,7 +56,7 @@ class DelphiOCRServer:
         if not os.getenv("GEMINI_API_KEY"):
             return create_error_response(
                 ErrorCodes.INTERNAL_ERROR,
-                "Configuration error: GOOGLE_API_KEY not found",
+                "Configuration error: GEMINI_API_KEY not found",
             )
 
         validation_error = self._validate_ocr_request(arguments)
@@ -84,23 +69,19 @@ class DelphiOCRServer:
         results = {}
 
         for image_key, image_data in images.items():
-            # Decode base64 image
             image_bytes = base64.b64decode(image_data)
             image = Image.open(io.BytesIO(image_bytes))
-
-            # Process with CV module - use output directly
             analysis_result = get_info(image)
             results[image_key] = analysis_result
 
         response = {"results": results}
-
         return CallToolResult(
             content=[TextContent(type="text", text=json.dumps(response))]
         )
 
     def _validate_ocr_request(
         self, arguments: Dict[str, Any]
-    ) -> CallToolResult:
+    ) -> CallToolResult | None:
         if not arguments:
             return create_error_response(
                 ErrorCodes.NO_ARGUMENTS, ErrorMessages.NO_ARGUMENTS
@@ -117,7 +98,6 @@ class DelphiOCRServer:
                 return create_error_response(
                     ErrorCodes.INVALID_BASE64, ErrorMessages.INVALID_BASE64
                 )
-
         return None
 
     def _is_valid_base64(self, data: str) -> bool:
@@ -126,3 +106,29 @@ class DelphiOCRServer:
             return True
         except Exception:
             return False
+
+
+# ---- HTTP bridge (FastAPI) that reuses the MCP handler above ----
+app = FastAPI()
+mcp = DelphiOCRServer()
+
+
+class OCRRequest(BaseModel):
+    images: dict[str, str]
+
+
+@app.post("/mcp/tools/image_to_text")
+async def image_to_text(req: OCRRequest):
+    result = await mcp._handle_ocr_signs(req.model_dump())
+    
+    try:
+        block = result.content[0]
+        if getattr(block, "type", None) == "text":
+            return json.loads(block.text)
+    except Exception as e:
+        return JSONResponse(
+            status_code=500, content={"error": f"Bridge unwrap failed: {e}"}
+        )
+    return JSONResponse(
+        status_code=400, content={"error": "Unexpected MCP result shape"}
+    )

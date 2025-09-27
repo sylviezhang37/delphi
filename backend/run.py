@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "mcp_server"))
 logger = logging.getLogger(__name__)
 
 
-async def main() -> None:
+async def main():
     server = DelphiOCRServer()
 
     async with stdio_server() as (read_stream, write_stream):
@@ -46,5 +46,6 @@ if __name__ == "__main__":
         logger.warning(
             "No .env file found."
         )
+        raise SystemExit(1)
 
     asyncio.run(main())
