@@ -1,13 +1,9 @@
-import numpy as np
-from google.colab import userdata
-from PIL import Image
-from google import genai
 # gemini api key
 apikey = userdata.get('GOOGLE_API_KEY')
 client = genai.Client(api_key=apikey)
 
 # example
-# input_image = './girlhacks_poster.png'
+input_image = './girlhacks_poster.png'
 
 # read input from MCP
 def readInput():
@@ -17,7 +13,6 @@ def readInput():
 input_image = Image.open(input_image)
 
 # pass formatted image into gemini, for it to perform analysis and give info
-
 def getInfo(Image):
 
   response = client.models.generate_content(
@@ -28,9 +23,12 @@ def getInfo(Image):
       be considerate of their disability, considering tone and lengt. Section
       it in parts, an overview (specifically titled: Overview) and then subsections
       of said overview, but no more subsections that that. A depth of 1 if you
-      can picture it (keep the overview under 40 words and each subsection under 70 words, this is 
+      can picture it (keep the overview under 25 words and the single subsection, named Details, under 70 words, this is 
       an absolute must!) 
-      """]
+      """],
+      config={
+        "response_mime_type": "application/json"
+    },
   )
   
   return response.text
