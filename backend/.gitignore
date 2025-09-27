@@ -1,6 +1,0 @@
-# Ignore environment file with secrets
-.env
-
-# Python compiled files
-__pycache__/
-*.pyc
