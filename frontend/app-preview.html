@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delphi - AI Vision Assistant Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 42px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+        }
+        
+        .assistant-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            font-size: 48px;
+            box-shadow: 0 8px 16px rgba(52, 152, 219, 0.3);
+        }
+        
+        .description {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+        
+        .button {
+            background: white;
+            border: none;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 10px 0;
+            width: 100%;
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .button.observation {
+            border-left-color: #27ae60;
+        }
+        
+        .button-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        
+        .button-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .button-description {
+            font-size: 14px;
+            color: #7f8c8d;
+            line-height: 1.4;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #95a5a6;
+        }
+        
+        .status {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #2e7d32;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Delphi</h1>
+            <p class="subtitle">Your AI Vision Assistant</p>
+        </div>
+        
+        <div class="status">
+            <div class="loading"></div>
+            <strong>React Native App Starting...</strong><br>
+            <small>This is a preview of your Delphi app interface</small>
+        </div>
+        
+        <div class="assistant-icon">🤖</div>
+        <p class="description">I'm here to help you see and understand your world</p>
+        
+        <button class="button" onclick="speak('Starting chat mode. You can now ask me questions about your surroundings.')">
+            <div class="button-icon">💬</div>
+            <div class="button-text">Start Chatting</div>
+            <div class="button-description">Ask me questions about anything</div>
+        </button>
+        
+        <button class="button observation" onclick="speak('Starting observation mode. I will scan your surroundings and describe what I see.')">
+            <div class="button-icon">👁️</div>
+            <div class="button-text">Observe Surroundings</div>
+            <div class="button-description">Let me scan and describe your environment</div>
+        </button>
+        
+        <div class="footer">
+            Tap anywhere to hear this message again
+        </div>
+    </div>
+    
+    <script>
+        // Simulate text-to-speech functionality
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.8;
+                utterance.pitch = 1.0;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert(text);
+            }
+        }
+        
+        // Welcome message on load
+        window.onload = function() {
+            setTimeout(() => {
+                speak("Welcome to Delphi, your AI-powered vision assistant. I'm here to help you navigate and understand your surroundings. You can start chatting with me or begin observing your environment.");
+            }, 1000);
+        };
+        
+        // Tap anywhere to repeat welcome message
+        document.addEventListener('click', function(e) {
+            if (e.target === document.body || e.target.classList.contains('container')) {
+                speak("Welcome to Delphi, your AI-powered vision assistant. I'm here to help you navigate and understand your surroundings. You can start chatting with me or begin observing your environment.");
+            }
+        });
+    </script>
+</body>
+</html>
