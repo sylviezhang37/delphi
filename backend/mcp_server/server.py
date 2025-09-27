@@ -60,7 +60,7 @@ class DelphiOCRServer:
 
         placeholder_response = {
             "overview": "Quick overview under 10 seconds",
-            "details": ["Detailed description under 30 seconds"],
+            "detail": ["Detailed description under 30 seconds"],
         }
         
         return CallToolResult(
