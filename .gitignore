@@ -15,3 +15,6 @@ venv/
 
 # Test Files
 backend/tests/*.png
+
+# Environment variables
+backend/.env
