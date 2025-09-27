@@ -3,8 +3,12 @@ import os
 from PIL import Image
 from google import genai
 from typing import Dict, Any, Union
+import load_dotenv
 
-load_dotenv()
+if './env'.exists():
+        load_dotenv(dotenv_path='./env')
+else:
+        logging.info("No backend/.env file found; continuing without loading local env")
 
 # gemini api key
 apikey = os.getenv('GOOGLE_API_KEY')
