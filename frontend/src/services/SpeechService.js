@@ -6,6 +6,7 @@ class SpeechService {
         this.pitch = 1.0;
         this.rate = 0.8;
         this.volume = 1;
+        this.enabled = true;
     }
 
     setUp() {
@@ -18,8 +19,15 @@ class SpeechService {
         this.rate = Math.max(0.0, Math.min(1.0, speed));
     }
 
+    setEnabled(enabled) {
+        if (!enabled) {
+            this.stop();
+        }
+        this.enabled = enabled;
+    }
+
     speak(text) {
-        if (!text) return;
+        if (!text || !this.enabled) return;
 
         const speechOptions = {
             language: this.language,
@@ -27,14 +35,8 @@ class SpeechService {
             rate: this.rate,
             volume: this.volume,
         };
-        this.stop()
+        this.stop();
         Speech.speak(text, speechOptions);
-    }
-
-    speakWithDelay(text, delay = 0, options = {}) {
-        setTimeout(() => {
-            this.speak(text, options);
-        }, delay);
     }
 
     stop() {

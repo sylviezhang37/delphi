@@ -37,6 +37,7 @@ const SettingsModal = ({ visible, onClose }) => {
 
     const handleVoiceToggle = (value) => {
         setVoiceEnabled(value);
+        speechService.setEnabled(value);
         if (hapticEnabled) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }
