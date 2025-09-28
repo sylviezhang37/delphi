@@ -6,7 +6,7 @@
 
 ## What It Does
 
-A mobile app where blind or low-vision users can capture their environment, and the app will speak aloud the information on signs, flyers, labels, etc. detected in the image.
+A mobile app where blind or low-vision users can capture their environment, and the app will speak aloud the information detected in the image. It could be used for a generic analysis of the surrounding, or help users get textual information from materials like flyers.
 
 ---
 
