@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Switch, Modal, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    ScrollView,
+    Switch,
+    Modal,
+    Dimensions,
+} from 'react-native';
 import Slider from '@react-native-community/slider';
 import * as Haptics from 'expo-haptics';
+import speechService from '../services/SpeechService';
 
 const { height } = Dimensions.get('window');
 
 const SettingsModal = ({ visible, onClose }) => {
     const [voiceSpeed, setVoiceSpeed] = useState(0.5);
     const [hapticEnabled, setHapticEnabled] = useState(true);
-    const [volume, setVolume] = useState(0.8);
     const [voiceEnabled, setVoiceEnabled] = useState(true);
 
     const handleHapticToggle = (value) => {
@@ -20,13 +29,7 @@ const SettingsModal = ({ visible, onClose }) => {
 
     const handleVoiceSpeedChange = (value) => {
         setVoiceSpeed(value);
-        if (hapticEnabled) {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        }
-    };
-
-    const handleVolumeChange = (value) => {
-        setVolume(value);
+        speechService.setSpeed(value);
         if (hapticEnabled) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }
@@ -47,27 +50,20 @@ const SettingsModal = ({ visible, onClose }) => {
 
     const testVoice = () => {
         if (voiceEnabled) {
-            // You can implement actual voice testing here
-            console.log('Testing voice with speed:', voiceSpeed, 'and volume:', volume);
+            speechService.speak('Testing voice settings', {
+                rate: voiceSpeed,
+            });
         }
     };
 
     return (
-        <Modal
-            visible={visible}
-            animationType="slide"
-            transparent={true}
-            onRequestClose={onClose}
-        >
+        <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
                     {/* Header */}
                     <View style={styles.header}>
                         <Text style={styles.title}>Accessibility Settings</Text>
-                        <TouchableOpacity
-                            style={styles.closeButton}
-                            onPress={onClose}
-                        >
+                        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
                             <Text style={styles.closeButtonText}>✕</Text>
                         </TouchableOpacity>
                     </View>
@@ -103,26 +99,9 @@ const SettingsModal = ({ visible, onClose }) => {
                                     />
                                     <Text style={styles.sliderLabel}>Fast</Text>
                                 </View>
-                                <Text style={styles.valueText}>{Math.round(voiceSpeed * 100)}%</Text>
-                            </View>
-
-                            <View style={styles.settingRow}>
-                                <Text style={styles.settingLabel}>Volume</Text>
-                                <View style={styles.sliderContainer}>
-                                    <Text style={styles.sliderLabel}>Quiet</Text>
-                                    <Slider
-                                        style={styles.slider}
-                                        minimumValue={0.0}
-                                        maximumValue={1.0}
-                                        value={volume}
-                                        onValueChange={handleVolumeChange}
-                                        minimumTrackTintColor="#f4b400"
-                                        maximumTrackTintColor="#333"
-                                        thumbStyle={{ backgroundColor: '#f4b400' }}
-                                    />
-                                    <Text style={styles.sliderLabel}>Loud</Text>
-                                </View>
-                                <Text style={styles.valueText}>{Math.round(volume * 100)}%</Text>
+                                <Text style={styles.valueText}>
+                                    {Math.round(voiceSpeed * 100)}%
+                                </Text>
                             </View>
 
                             <TouchableOpacity style={styles.testButton} onPress={testVoice}>

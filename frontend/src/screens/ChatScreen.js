@@ -9,8 +9,8 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import speechService from '../services/SpeechService';
 import mcp from "../services/MCPService"
-import * as Speech from 'expo-speech';
 
 export default function ChatScreen({ route, navigation }) {
   const { photoBase64 } = route.params || {};
@@ -19,7 +19,11 @@ export default function ChatScreen({ route, navigation }) {
   const [detailString, setDetailString] = useState('');
 
   useEffect(() => {
-    if (!photoBase64) return;
+    // Speak the initial message
+    speechService.speak(messages[0].text);
+  }, []);
+
+  if (!photoBase64) return;
   
     const sendToMCP = async () => {
       try {
@@ -104,28 +108,27 @@ export default function ChatScreen({ route, navigation }) {
       setTimeout(() => {
         const aiResponse = {
           id: messages.length + 2,
-          text: "I understand you're asking about: " + inputText + ". I'm here to help describe your surroundings or answer questions about what you can't see.",
+          text:
+            "I understand you're asking about: " +
+            inputText +
+            ". I'm here to help describe your surroundings or answer questions about what you can't see.",
           isUser: false,
         };
-        setMessages(prev => [...prev, aiResponse]);
-        
+        setMessages((prev) => [...prev, aiResponse]);
+
         // Speak the AI response
-        Speech.speak(aiResponse.text, {
-          language: 'en',
-          pitch: 1.0,
-          rate: 0.8,
-        });
+        speechService.speak(aiResponse.text);
       }, 1000);
     }
   };
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <View style={styles.header}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}
           accessibilityLabel="Go back to home"
@@ -142,10 +145,7 @@ export default function ChatScreen({ route, navigation }) {
         {messages.map((message) => (
           <View
             key={message.id}
-            style={[
-              styles.messageBubble,
-              message.isUser ? styles.userMessage : styles.aiMessage,
-            ]}
+            style={[styles.messageBubble, message.isUser ? styles.userMessage : styles.aiMessage]}
           >
             <Text
               style={[
@@ -203,11 +203,7 @@ export default function ChatScreen({ route, navigation }) {
         <TouchableOpacity
           style={styles.cameraButton}
           onPress={() => {
-            Speech.speak("Opening camera to scan your surroundings.", {
-              language: 'en',
-              pitch: 1.0,
-              rate: 0.8,
-            });
+            speechService.speak('Opening camera to scan your surroundings.');
             navigation.navigate('Observation');
           }}
           accessibilityLabel="Open camera to scan surroundings"
