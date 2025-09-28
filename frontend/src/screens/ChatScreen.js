@@ -126,7 +126,7 @@ export default function ChatScreen({ route, navigation }) {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate('Home')}
           accessibilityLabel="Go back to home"
         >
           <Text style={styles.backButtonText}>← Back</Text>
