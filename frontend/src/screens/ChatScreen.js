@@ -9,35 +9,95 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import mcp from "../services/MCPService"
 import * as Speech from 'expo-speech';
 
-export default function ChatScreen({ navigation }) {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "Hello! I'm Delphi, your AI vision assistant. How can I help you today?",
-      isUser: false,
-    },
-  ]);
+export default function ChatScreen({ route, navigation }) {
+  const { photoBase64 } = route.params || {};
+  const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [detailString, setDetailString] = useState('');
 
   useEffect(() => {
-    // Speak the initial message
-    Speech.speak(messages[0].text, {
-      language: 'en',
-      pitch: 1.0,
-      rate: 0.8,
-    });
-  }, []);
+    if (!photoBase64) return;
+  
+    const sendToMCP = async () => {
+      try {
+        await mcp.connect();
+        const response = await mcp.processSingleImage(photoBase64);
+  
+        const key = Object.keys(response.results)[0];
+        const nestedString = response.results[key].trim();
+        const { overview, details } = JSON.parse(nestedString);
+        setDetailString(details)
+  
+        await mcp.disconnect();
+  
+        // Add AI message with overview
+        setMessages(prev => [
+          ...prev,
+          {
+            id: prev.length + 1,
+            text: `Here is an overview of the image you took: ${overview}\nDo you need more context?`,
+            isUser: false,
+            type: 'options',
+            options: ['Yes', 'No'],
+            overview,
+            details,
+          }
+        ]);
+  
+        // Speak the AI message
+        Speech.speak(`Here is an overview of the image you took: ${overview}. Do you need more context?`, { language: 'en', pitch: 1.0, rate: 0.8 });
+  
+      } catch (err) {
+        console.error("MCP test failed:", err);
+      }
+    };
+  
+    sendToMCP();
+  }, [photoBase64]);
+  
+
+  const handleOptionPress = (option, details) => {
+    setMessages(prev => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        text: option,
+        isUser: true,
+      }
+    ]);
+  
+    let aiResponseText = '';
+    if (option === 'Yes') {
+      aiResponseText = `Here are more details on the image: ${details}`;
+    } else {
+      aiResponseText = `Great, you can continue taking another photo if you want!`;
+    }
+  
+    const aiMessage = {
+      id: messages.length + 2,
+      text: aiResponseText,
+      isUser: false,
+    };
+  
+    setMessages(prev => [...prev, aiMessage]);
+  
+    // Speak AI response
+    Speech.speak(aiMessage.text, { language: 'en', pitch: 1.0, rate: 0.8 });
+  };
 
   const sendMessage = () => {
     if (inputText.trim()) {
-      const newMessage = {
-        id: messages.length + 1,
-        text: inputText,
-        isUser: true,
-      };
-      setMessages([...messages, newMessage]);
+      setMessages(prev => [
+        ...messages,
+        {
+          id: messages.length + 1,
+          text: inputText,
+          isUser: true,
+        }
+      ]);
       setInputText('');
 
       // Simulate AI response (replace with actual API call)
@@ -75,7 +135,7 @@ export default function ChatScreen({ navigation }) {
       </View>
 
       <View style={styles.header2}>
-          <Text style={styles.headerTitle}>Chat with Delphi</Text>
+          <Text style={styles.headerTitle}>Delphi </Text>
       </View>
 
       <ScrollView style={styles.messagesContainer}>
@@ -95,6 +155,27 @@ export default function ChatScreen({ navigation }) {
             >
               {message.text}
             </Text>
+
+            {/* Render buttons if message has options */}
+            {!message.isUser && message.type === 'options' && (
+              <View style={{ flexDirection: 'row', marginTop: 5 }}>
+                {message.options.map(option => (
+                  <TouchableOpacity
+                    key={option}
+                    style={{
+                      backgroundColor: '#497a5b',
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
+                      marginRight: 10,
+                      borderRadius: 10,
+                    }}
+                    onPress={() => handleOptionPress(option, detailString)}
+                  >
+                    <Text style={{ color: '#fff' }}>{option}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
         ))}
       </ScrollView>

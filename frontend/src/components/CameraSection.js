@@ -49,16 +49,15 @@ const CameraSection = ({ navigation }) => {
 
       const photo = await cameraRef.current.takePictureAsync({
         quality: 1,
+        base64: true
       });
-
-      console.log('Captured photo:', photo);
-
+      
       const { status } = await MediaLibrary.requestPermissionsAsync();
       if (status === 'granted') {
         await MediaLibrary.saveToLibraryAsync(photo.uri);
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         Alert.alert('Photo Captured!', 'Photo saved to your photo gallery!');
-        navigation.navigate('Chat', { photoUri: photo.uri }); 
+        navigation.navigate('Chat', { photoBase64: photo.base64 }); 
       }
     } catch (error) {
       console.error('Error taking picture:', error);

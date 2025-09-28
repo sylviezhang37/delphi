@@ -58,18 +58,18 @@ export default mcp;
 
 // --- quick test ---
 // TODO: delete later
-(async () => {
-  try {
-    await mcp.connect();
+// (async () => {
+//   try {
+//     await mcp.connect();
 
-    const fakeBase64 =
-      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=";
+//     const fakeBase64 =
+//       "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=";
 
-    const result = await mcp.processSingleImage(fakeBase64);
-    console.log("MCP response:", result);
+//     const result = await mcp.processSingleImage(fakeBase64);
+//     console.log("MCP response:", result);
 
-    await mcp.disconnect();
-  } catch (err) {
-    console.error("MCP test failed:", err);
-  }
-})();
+//     await mcp.disconnect();
+//   } catch (err) {
+//     console.error("MCP test failed:", err);
+//   }
+// })();
