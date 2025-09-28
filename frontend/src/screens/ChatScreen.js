@@ -19,75 +19,76 @@ export default function ChatScreen({ route, navigation }) {
     const [detailString, setDetailString] = useState('');
 
     useEffect(() => {
-        if (!photoBase64) return;
-
-        const sendToMCP = async () => {
-            try {
-                await mcp.connect();
-                const response = await mcp.processSingleImage(photoBase64);
-
-                const key = Object.keys(response.results)[0];
-                const nestedString = response.results[key].trim();
-                const { overview, details } = JSON.parse(nestedString);
-                setDetailString(details);
-
-                await mcp.disconnect();
-
-                // Add AI message with overview
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        id: prev.length + 1,
-                        text: `Here is an overview of the image you took: ${overview}\nDo you need more context?`,
-                        isUser: false,
-                        type: 'options',
-                        options: ['Yes', 'No'],
-                        overview,
-                        details,
-                    },
-                ]);
-
-                // Speak the AI message
-                speechService.speak(
-                    `Here is an overview of the image you took: ${overview}. Do you need more context?`,
-                    { language: 'en', pitch: 1.0, rate: 0.8 }
-                );
-            } catch (err) {
-                console.error('MCP test failed:', err);
-            }
-        };
-
-        sendToMCP();
-    }, [photoBase64]);
-
-    const handleOptionPress = (option, details) => {
-        setMessages((prev) => [
-            ...prev,
-            {
-                id: prev.length + 1,
-                text: option,
-                isUser: true,
-            },
-        ]);
-
-        let aiResponseText = '';
-        if (option === 'Yes') {
-            aiResponseText = `Here are more details on the image: ${details}`;
-        } else {
-            aiResponseText = `Great, you can continue taking another photo if you want!`;
+        if (!photoBase64) {
+            return;
         }
-
-        const aiMessage = {
-            id: messages.length + 2,
-            text: aiResponseText,
-            isUser: false,
-        };
-
-        setMessages((prev) => [...prev, aiMessage]);
-
-        // Speak AI response
-        speechService.speak(aiMessage.text, { language: 'en', pitch: 1.0, rate: 0.8 });
+  
+        const sendToMCP = async () => {
+        try {
+            await mcp.connect();
+            const response = await mcp.processSingleImage(photoBase64);
+    
+            const key = Object.keys(response.results)[0];
+            const nestedString = response.results[key].trim();
+            const { overview, details } = JSON.parse(nestedString);
+            setDetailString(details);
+    
+            await mcp.disconnect();
+    
+            // Add AI message with overview
+            setMessages(prev => [
+                ...prev,
+                {
+                    id: prev.length + 1,
+                    text: `Here is an overview of the image you took: ${overview}\nDo you need more context?`,
+                    isUser: false,
+                    type: 'options',
+                    options: ['Yes', 'No'],
+                    overview,
+                    details,
+                }
+            ]);
+    
+            // Speak the AI message
+            speechService.speak(`Here is an overview of the image you took: ${overview}. Do you need more context?`);
+    
+        } catch (err) {
+            console.error("MCP test failed:", err);
+        }
     };
+  
+    sendToMCP();
+  }, [photoBase64]);
+  
+
+  const handleOptionPress = (option, details) => {
+    setMessages(prev => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        text: option,
+        isUser: true,
+      }
+    ]);
+  
+    let aiResponseText = '';
+    if (option === 'Yes') {
+      aiResponseText = `Here are more details on the image: ${details}`;
+    } else {
+      aiResponseText = `Great, you can continue taking another photo if you want!`;
+    }
+  
+    const aiMessage = {
+      id: messages.length + 2,
+      text: aiResponseText,
+      isUser: false,
+    };
+  
+    setMessages(prev => [...prev, aiMessage]);
+  
+    // Speak AI response
+    speechService.speak(aiMessage.text);
+  };
 
     const sendMessage = () => {
         if (inputText.trim()) {
@@ -128,7 +129,7 @@ export default function ChatScreen({ route, navigation }) {
                 <TouchableOpacity
                     style={styles.backButton}
                     onPress={() => {
-                        navigation.goBack();
+                        navigation.navigate('Home')
                         speechService.stop();
                     }}
                     accessibilityLabel="Go back to home"
@@ -209,7 +210,7 @@ export default function ChatScreen({ route, navigation }) {
                     style={styles.cameraButton}
                     onPress={() => {
                         speechService.speak('Opening camera to scan your surroundings.');
-                        navigation.navigate('Observation');
+                        navigation.navigate('Camera');
                     }}
                     accessibilityLabel="Open camera to scan surroundings"
                 >

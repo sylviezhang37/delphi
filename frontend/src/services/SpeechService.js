@@ -7,6 +7,7 @@ class SpeechService {
         this.rate = 0.8;
         this.volume = 1;
         this.enabled = true;
+        this.cameraMessageAnnounced = false;
     }
 
     setUp() {
@@ -24,6 +25,10 @@ class SpeechService {
             this.stop();
         }
         this.enabled = enabled;
+    }
+
+    setCameraMessageAnnounced() {
+        this.cameraMessageAnnounced = true;
     }
 
     speak(text) {

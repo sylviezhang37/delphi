@@ -1,7 +1,7 @@
 import { EXPO_PUBLIC_MCP_URL } from '@env';
 const BASE_URL = 'EXPO_PUBLIC_MCP_URL' || 'http://localhost:8000';
 const OCR_ROUTE = '/mcp/tools/image_to_text';
-const TIMEOUT_MS = 10000;
+const TIMEOUT_MS = 20000;
 
 async function fetchJSON(url, opts = {}, timeoutMs = TIMEOUT_MS) {
     const controller = new AbortController();

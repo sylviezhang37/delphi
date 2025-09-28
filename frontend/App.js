@@ -2,9 +2,9 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import HomeScreen from './src/screens/CameraScreen';
+import HomeScreen from './src/screens/HomeScreen';
 import ChatScreen from './src/screens/ChatScreen';
-import MainScreen from './src/screens/MainScreen';
+import CameraScreen from './src/screens/CameraScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,7 +20,7 @@ export default function App() {
             >
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Chat" component={ChatScreen} />
-                <Stack.Screen name="Observation" component={MainScreen} />
+                <Stack.Screen name="Camera" component={CameraScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
