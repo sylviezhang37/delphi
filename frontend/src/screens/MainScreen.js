@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-nati
 import CameraSection from '../components/CameraSection';
 import SettingsModal from '../components/SettingsModal';
 import CameraHelpModal from '../components/CameraHelpModal';
+import speechService from '../services/SpeechService';
 import * as Haptics from 'expo-haptics';
-import * as Speech from 'expo-speech';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,32 +16,32 @@ const MainScreen = ({ navigation }) => {
 
   // Announce instructions on screen mount
   useEffect(() => {
-    const instructionMessage = "You're on the camera screen. You can take a photo of your surroundings, and we'll tell you what's there.";
-    Speech.speak(instructionMessage, { language: 'en', pitch: 1.0, rate: 0.8 });
+    speechService.stop();
+    const instructionMessage =
+      "You're on the camera screen. You can take a photo of your surroundings, and we'll tell you what's there.";
+    speechService.speak(instructionMessage);
   }, []);
 
-//   // Called after user takes a photo
-//   const capturePhoto = () => {
-//     // simulate environment analysis
-//     const mockDescription = "I can see you're in a room with furniture. There appears to be a table in the center, chairs around it, and a window letting in natural light. The room looks organized and well-lit.";
-//     setDescription(mockDescription);
-//     Speech.speak(mockDescription, { language: 'en', pitch: 1.0, rate: 0.7 });
-//   };
+  //   // Called after user takes a photo
+  //   const capturePhoto = () => {
+  //     // simulate environment analysis
+  //     const mockDescription = "I can see you're in a room with furniture. There appears to be a table in the center, chairs around it, and a window letting in natural light. The room looks organized and well-lit.";
+  //     setDescription(mockDescription);
+  //     speechService.speak(mockDescription);
+  //   };
 
   const repeatDescription = () => {
     if (description) {
-      Speech.speak(description, { language: 'en', pitch: 1.0, rate: 0.7 });
+      speechService.stop();
+      speechService.speak(description);
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.topButtonsContainer}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={{fontSize: 16, color: '#f4b400', fontWeight: '600'}}>← Back</Text>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Text style={{ fontSize: 16, color: '#f4b400', fontWeight: '600' }}>← Back</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -54,10 +54,7 @@ const MainScreen = ({ navigation }) => {
           <Text style={styles.helpButtonText}>Help</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.settingsButton}
-          onPress={() => setSettingsVisible(true)}
-        >
+        <TouchableOpacity style={styles.settingsButton} onPress={() => setSettingsVisible(true)}>
           <Text style={styles.settingsButtonText}>Settings</Text>
         </TouchableOpacity>
       </View>
@@ -89,59 +86,59 @@ const MainScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: '#000', 
-    paddingTop: 100 
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
+    paddingTop: 100,
   },
 
-  topButtonsContainer: { 
-    position: 'absolute', 
-    top: 60, 
-    left: 20, 
-    right: 20, 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    zIndex: 1000 
+  topButtonsContainer: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    right: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    zIndex: 1000,
   },
 
   backButton: { padding: 5 },
 
-  helpButton: { 
-    backgroundColor: '#f4b400', 
-    paddingHorizontal: 15, 
-    paddingVertical: 8, 
-    borderRadius: 20, 
-    borderWidth: 2, 
-    borderColor: '#f4b400' 
+  helpButton: {
+    backgroundColor: '#f4b400',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#f4b400',
   },
 
-  helpButtonText: { 
-    color: '#000', 
-    fontSize: 14, 
-    fontWeight: 'medium' 
+  helpButtonText: {
+    color: '#000',
+    fontSize: 14,
+    fontWeight: 'medium',
   },
 
-  settingsButton: { 
-    backgroundColor: '#f4b400', 
-    paddingHorizontal: 15, 
-    paddingVertical: 8, 
-    borderRadius: 20, 
-    borderWidth: 2, 
-    borderColor: '#f4b400' 
+  settingsButton: {
+    backgroundColor: '#f4b400',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#f4b400',
   },
 
-  settingsButtonText: { 
-    color: '#000', 
-    fontSize: 14, 
-    fontWeight: 'medium' 
+  settingsButtonText: {
+    color: '#000',
+    fontSize: 14,
+    fontWeight: 'medium',
   },
 
   cameraContainer: { flex: 1 },
 
-  controlsContainer: { 
-    backgroundColor: '#fff', 
-    padding: 20 
+  controlsContainer: {
+    backgroundColor: '#fff',
+    padding: 20,
   },
 
   instructionOverlay: {
@@ -160,41 +157,41 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  button: { 
-    padding: 15, 
-    borderRadius: 10, 
-    marginVertical: 5, 
-    alignItems: 'center' 
+  button: {
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 5,
+    alignItems: 'center',
   },
 
-  speakButton: { 
-    backgroundColor: '#497a5b', 
-    borderWidth: 1, 
-    borderColor: '#f4b400' 
+  speakButton: {
+    backgroundColor: '#497a5b',
+    borderWidth: 1,
+    borderColor: '#f4b400',
   },
 
-  buttonText: { 
-    color: '#fff', 
-    fontWeight: 'bold' 
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 
-  descriptionContainer: { 
-    marginTop: 10, 
-    padding: 15, 
-    backgroundColor: '#f8f9fa', 
-    borderRadius: 10 
+  descriptionContainer: {
+    marginTop: 10,
+    padding: 15,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 10,
   },
 
-  descriptionTitle: { 
-    fontWeight: 'bold', 
-    fontSize: 16, 
-    color: '#497a5b', 
-    marginBottom: 5 
+  descriptionTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#497a5b',
+    marginBottom: 5,
   },
 
-  descriptionText: { 
-    fontSize: 14, 
-    color: '#497a5b' 
+  descriptionText: {
+    fontSize: 14,
+    color: '#497a5b',
   },
 });
 

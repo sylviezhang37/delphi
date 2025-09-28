@@ -8,7 +8,7 @@ import {
   AccessibilityInfo,
   Image,
 } from 'react-native';
-import * as Speech from 'expo-speech';
+import speechService from '../services/SpeechService';
 import { enableAccessibilityFeatures, announceScreenChange } from './AccessibilityHelper';
 
 const { width, height } = Dimensions.get('window');
@@ -20,44 +20,35 @@ export default function HomeScreen({ navigation }) {
   // Speak welcome message when component mounts
   useEffect(() => {
     announceScreenChange('Home');
-    const welcomeMessage = "Welcome to Delphi, your AI-powered vision assistant. I'm here to help you navigate and understand your surroundings. You can start chatting with me or begin observing your environment.";
-    Speech.speak(welcomeMessage, {
-      language: 'en',
-      pitch: 1.0,
-      rate: 0.8,
-    });
+    const welcomeMessage =
+      "Welcome to Delphi, your AI-powered vision assistant. I'm here to help you navigate and understand your surroundings. You can take a photo to start observing your environment.";
+    speechService.speak(welcomeMessage);
   }, []);
 
   const handleStartChat = () => {
-    Speech.speak("Starting chat mode. You can now ask me questions about your surroundings.", {
-      language: 'en',
-      pitch: 1.0,
-      rate: 0.8,
-    });
+    speechService.speak(
+      'Starting chat mode. You can now ask me questions about your surroundings.'
+    );
     navigation.navigate('Chat');
   };
 
   const handleStartObservation = () => {
-    Speech.speak("Starting observation mode. I'll scan your surroundings and describe what I see.", {
-      language: 'en',
-      pitch: 1.0,
-      rate: 0.8,
-    });
+    speechService.speak(
+      "Starting observation mode. I'll scan your surroundings and describe what I see."
+    );
     navigation.navigate('Observation');
   };
 
   const handleScreenTouch = () => {
-    const welcomeMessage = "Welcome to Delphi, your AI-powered vision assistant. I'm here to help you navigate and understand your surroundings. You can start chatting with me or begin observing your environment.";
-    Speech.speak(welcomeMessage, {
-      language: 'en',
-      pitch: 1.0,
-      rate: 0.8,
-    });
+    speechService.stop();
+    const welcomeMessage =
+      "Welcome to Delphi, your AI-powered vision assistant. I'm here to help you navigate and understand your surroundings. You can start by taking a photo to begin observing your environment.";
+    speechService.speak(welcomeMessage);
   };
 
   return (
-    <TouchableOpacity 
-      style={styles.container} 
+    <TouchableOpacity
+      style={styles.container}
       onPress={handleScreenTouch}
       accessibilityLabel="Tap to hear welcome message again"
       activeOpacity={1}
@@ -66,8 +57,8 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.mainContent}>
         {/* Header with Logo */}
         <View style={styles.header}>
-          <Image 
-            source={require('../assets/logo.png')} 
+          <Image
+            source={require('../assets/logo.png')}
             style={styles.logo}
             accessibilityLabel="Delphi Logo"
             resizeMode="contain"
@@ -86,8 +77,8 @@ export default function HomeScreen({ navigation }) {
         {/* Assistant Icon */}
         <View style={styles.iconContainer}>
           <View style={styles.assistantIcon}>
-            <Image 
-              source={require('../assets/hearing-icon.png')} 
+            <Image
+              source={require('../assets/hearing-icon.png')}
               style={styles.iconImage}
               accessibilityLabel="AI Assistant Icon"
               resizeMode="contain"
@@ -144,7 +135,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: width * 0.4,
-    height: (width * 0.4) * 0.3,
+    height: width * 0.4 * 0.3,
   },
   mainContent: {
     flex: 1,
