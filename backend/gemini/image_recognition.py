@@ -18,13 +18,26 @@ def get_info(image: str) -> Dict[str, str]:
         contents=[
             image,
             """
-            Explain the contents like you're explaining it to a blind person, 
-            imagine this will be read aloud to them (but do not mention this); 
-            be considerate of their disability, considering tone and lengt. Section
-            it in parts, an overview (specifically titled: Overview) and then subsections
-            of said overview, but no more subsections that that. A depth of 1 if you
-            can picture it (keep the overview under 25 words and the single subsection, named Details, under 70 words, this is 
-            an absolute must!) 
+            You are an expert at describing images for blind users. 
+            Use a thoughtful and respectful tone.
+
+            Produce exactly two sections:
+            1. "overview" – a short summary of the image (under 35 words).
+            2. "details" – a longer explanation of the image (under 120 words).
+
+            If you cannot confidently identify the image, set:
+            "overview": "",
+            "details": "",
+            "readable": false
+
+            Otherwise, set "readable": true.
+
+            Always return a JSON object in this exact format:
+            {
+                "overview": "...",
+                "details": "...",
+                "readable": boolean
+            }
             """,
         ],
         config={"response_mime_type": "application/json"},
