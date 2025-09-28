@@ -1,52 +1,40 @@
-# delphi
+# Delphi
 
-NJIT GirlHacks 2025
+**NJIT GirlHacks 2025 Project**
 
-What it does
+---
 
-A mobile app where a blind/low-vision user can capture the environment, and the app will speak aloud the information on signs, flyers, labels, etc. detected in the image.
+## What It Does
 
-⸻
+A mobile app where blind or low-vision users can capture their environment, and the app will speak aloud the information on signs, flyers, labels, etc. detected in the image.
 
-Current Scope
-• Capture a single image from phone camera.
-• Send image to backend via MCP server.
-• Backend runs OCR → extracts text.
-• Return extracted text in JSON.
-• App reads text aloud via TTS.
+---
 
-⸻
+## Current Scope
 
-How Components Work Together
+- Capture a single image from the phone camera
+- Send image to backend via MCP server
+- Backend runs OCR via Gen AI → extracts descriptions
+- Return extracted text in JSON
+- App reads text aloud via TTS
 
-1. Frontend (React Native app)
-   • Camera: lets user take a photo.
-   • Networking: sends photo to backend MCP tool (ocr_signs).
-   • Speech: converts JSON text results → audio (via expo-speech).
+---
 
-Input: user’s photo
-Output: spoken text
+## How Components Work Together
 
-⸻
+### 1. Frontend (React Native app)
 
-2. Backend (MCP server)
-   • MCP Tool (ocr_signs): exposed to frontend as a standard tool.
-   • Orchestrator:
-   • Receives image from frontend.
-   • Preprocesses (resize/format).
-   • Runs OCR (EasyOCR/Tesseract).
-   • Packages results into clean JSON.
+- **Camera**: lets user take a photo
+- **Networking**: sends photo to backend MCP server
+- **Speech**: converts backend JSON output → audio
+- **Accessibility**: announce new screen
 
-Input: image from frontend
-Output: JSON { "texts": ["Free tutoring 5PM", "Exit"] }
+**Input**: user’s photo  
+**Output**: spoken text
 
-⸻
+---
 
-3. CV Module (OCR)
-   • Uses a pre-trained OCR engine.
-   • Extracts text strings from the photo.
-   • Returns plain strings.
+### 2. Backend (MCP Server)
 
-⸻
-
-User Flow 1. User opens app and captures an image 2. App takes photo → sends to backend 3. Backend OCR extracts text → returns JSON 4. App reads aloud: “Free tutoring 5PM, Room 101.”
+- **MCP Portal**: exposed to frontend as a standard tool
+- **Gemini API**: converts image to text and output a high-level and a detailed description
