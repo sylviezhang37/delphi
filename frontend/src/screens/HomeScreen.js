@@ -40,7 +40,6 @@ export default function HomeScreen({ navigation }) {
   };
 
   const handleScreenTouch = () => {
-    speechService.stop();
     const welcomeMessage =
       "Welcome to Delphi, your AI-powered vision assistant. I'm here to help you navigate and understand your surroundings. You can start by taking a photo to begin observing your environment.";
     speechService.speak(welcomeMessage);
@@ -90,22 +89,12 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.actionsContainer}>
           <TouchableOpacity
             style={styles.primaryButton}
-            onPress={handleStartChat}
-            accessibilityRole="button"
-            accessibilityLabel="Start chatting with the assistant"
-            accessibilityHint="Double tap to begin a conversation with the AI assistant"
-          >
-            <Text style={styles.primaryButtonText}>Start Chatting</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.secondaryButton}
             onPress={handleStartObservation}
             accessibilityRole="button"
             accessibilityLabel="Start observing surroundings"
             accessibilityHint="Double tap to begin scanning and describing your environment"
           >
-            <Text style={styles.secondaryButtonText}>Scan Environment</Text>
+            <Text style={styles.primaryButtonText}>Scan Environment</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -126,7 +115,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   header: {
-    paddingTop: 60,
+    paddingTop: 100,
     paddingBottom: 10,
     paddingHorizontal: 30,
     alignItems: 'center',
@@ -164,6 +153,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   assistantIcon: {
     width: 100,
@@ -196,7 +186,7 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     backgroundColor: '#497a5b',
-    paddingVertical: 18,
+    paddingVertical: 20,
     paddingHorizontal: 30,
     borderRadius: 25,
     alignItems: 'center',
@@ -213,21 +203,7 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: {
     color: '#ffffff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  secondaryButton: {
-    backgroundColor: '#ffffff',
-    paddingVertical: 18,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#497a5b',
-  },
-  secondaryButtonText: {
-    color: '#497a5b',
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
   },
   footer: {

@@ -19,11 +19,7 @@ export default function ChatScreen({ route, navigation }) {
   const [detailString, setDetailString] = useState('');
 
   useEffect(() => {
-    // Speak the initial message
-    speechService.speak(messages[0].text);
-  }, []);
-
-  if (!photoBase64) return;
+    if (!photoBase64) return;
   
     const sendToMCP = async () => {
       try {
@@ -52,7 +48,7 @@ export default function ChatScreen({ route, navigation }) {
         ]);
   
         // Speak the AI message
-        Speech.speak(`Here is an overview of the image you took: ${overview}. Do you need more context?`, { language: 'en', pitch: 1.0, rate: 0.8 });
+        speechService.speak(`Here is an overview of the image you took: ${overview}. Do you need more context?`, { language: 'en', pitch: 1.0, rate: 0.8 });
   
       } catch (err) {
         console.error("MCP test failed:", err);
@@ -89,7 +85,7 @@ export default function ChatScreen({ route, navigation }) {
     setMessages(prev => [...prev, aiMessage]);
   
     // Speak AI response
-    Speech.speak(aiMessage.text, { language: 'en', pitch: 1.0, rate: 0.8 });
+    speechService.speak(aiMessage.text, { language: 'en', pitch: 1.0, rate: 0.8 });
   };
 
   const sendMessage = () => {
@@ -158,20 +154,20 @@ export default function ChatScreen({ route, navigation }) {
 
             {/* Render buttons if message has options */}
             {!message.isUser && message.type === 'options' && (
-              <View style={{ flexDirection: 'row', marginTop: 5 }}>
+              <View style={{ flexDirection: 'row', marginTop: 10 }}>
                 {message.options.map(option => (
                   <TouchableOpacity
                     key={option}
                     style={{
                       backgroundColor: '#497a5b',
-                      paddingHorizontal: 10,
-                      paddingVertical: 5,
+                      paddingHorizontal: 20,
+                      paddingVertical: 10,
                       marginRight: 10,
                       borderRadius: 10,
                     }}
                     onPress={() => handleOptionPress(option, detailString)}
                   >
-                    <Text style={{ color: '#fff' }}>{option}</Text>
+                    <Text style={{ color: '#fff', fontSize: 18 }}>{option}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -208,7 +204,7 @@ export default function ChatScreen({ route, navigation }) {
           }}
           accessibilityLabel="Open camera to scan surroundings"
         >
-          <Text style={styles.cameraButtonText}>📷 Scan Environment</Text>
+          <Text style={styles.cameraButtonText}>Re-Scan Environment</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -318,7 +314,7 @@ const styles = StyleSheet.create({
   },
   cameraButton: {
     backgroundColor: '#497a5b',
-    paddingVertical: 12,
+    paddingVertical: 20,
     paddingHorizontal: 20,
     borderRadius: 20,
     alignItems: 'center',
@@ -327,7 +323,7 @@ const styles = StyleSheet.create({
   },
   cameraButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: 'bold',
   },
 });

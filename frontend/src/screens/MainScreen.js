@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import CameraSection from '../components/CameraSection';
 import SettingsModal from '../components/SettingsModal';
@@ -6,17 +6,13 @@ import CameraHelpModal from '../components/CameraHelpModal';
 import speechService from '../services/SpeechService';
 import * as Haptics from 'expo-haptics';
 
-const { width, height } = Dimensions.get('window');
-
 const MainScreen = ({ navigation }) => {
   const [settingsVisible, setSettingsVisible] = useState(false);
   const [helpVisible, setHelpVisible] = useState(false);
   const [description, setDescription] = useState('');
-  const cameraRef = useRef(null);
 
   // Announce instructions on screen mount
   useEffect(() => {
-    speechService.stop();
     const instructionMessage =
       "You're on the camera screen. You can take a photo of your surroundings, and we'll tell you what's there.";
     speechService.speak(instructionMessage);
@@ -32,7 +28,6 @@ const MainScreen = ({ navigation }) => {
 
   const repeatDescription = () => {
     if (description) {
-      speechService.stop();
       speechService.speak(description);
     }
   };

@@ -27,7 +27,7 @@ class SpeechService {
             rate: this.rate,
             volume: this.volume,
         };
-
+        this.stop()
         Speech.speak(text, speechOptions);
     }
 
