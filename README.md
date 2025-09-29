@@ -4,6 +4,9 @@
 
 ---
 
+## Demo Video
+https://www.youtube.com/watch?v=I1YlobrLi8g&t=1s 
+
 ## What It Does
 
 A mobile app where blind or low-vision users can capture photos to understand their environment. The app will announce the information detected in the image, and it could be used for a generic analysis of the surrounding, or help users get textual information from materials like flyers.
